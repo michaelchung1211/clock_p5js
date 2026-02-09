@@ -185,44 +185,12 @@ function rotation_init(){
   }
 }
 
-//just for the second clock
-function old_single(xx, yy, t){
-  push()
-  translate(xx, yy)
-  let x = 0
-  let y = 0
-  for (let i = 0; i < 6; i++){
-    for (let j = 0; j < 4; j++){
-      old_clock(x, y, chart[t][i*4+j])
-      x += style_R
-    }
-    x -= style_R*4
-    y += style_R
-  }
-  pop()
-}
-
-function old_clock(x, y, n){
-  push()
-    translate(x, y)
-    fill(224, 252, 255)
-    circle(0,0,style_R)
-    fill(0,0,0)
-    push()
-      rotate(decode[n][0])
-      rect(0, -style_ST/2, style_R-32, style_ST, 2)
-    pop()
-    rotate(decode[n][1])
-    rect(0, -style_ST/2, style_R-32, style_ST, 2)
-  pop()
-}
-
 class Snowflake {
   constructor() {
     this.reset();
-    this.size = 15; // 直徑（半徑 7.5）
+    this.size = 15;
     this.offset = random(1000);
-    this.alpha = random(120, 200); // 半透明程度
+    this.alpha = random(120, 200);
   }
   reset() {
     this.x = random(width);
@@ -230,15 +198,11 @@ class Snowflake {
     this.speed = random(1, 2);
   }
   update() {
-    // 下落
     this.y += this.speed;
-    // 左右飄動
     let drift = map(noise(this.offset + frameCount * 0.01), 0, 1, -1, 1);
     this.x += drift * 0.5;
-    // 左右穿回
     if (this.x < -20) this.x = width + 20;
     if (this.x > width + 20) this.x = -20;
-    // 掉到底部 → 重生
     if (this.y > height + 10) {
     this.reset();
     this.y = -10;
@@ -246,7 +210,8 @@ class Snowflake {
   }
   show() {
     noStroke();
-    fill(255, this.alpha); // 半透明白色
+    fill(255, this.alpha);
     circle(this.x, this.y, this.size);
   }
 }
+
